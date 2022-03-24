@@ -131,8 +131,14 @@ OTHER_FILES += platformio.ini
 CONFIG += c++11
 
 SOURCES += \
+    battery.cpp \
+    main.cpp \
     src/battery.cpp \
+    src/battery.cpp \
+    src/main.cpp \
     src/main.cpp
 
 HEADERS += \
+    battery.h \
+    src/battery.h \
     src/battery.h
