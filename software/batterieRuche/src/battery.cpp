@@ -26,8 +26,6 @@ i1 = getCurrent_mA();
 
 
 
-
-
         if(charge>capaciteMax){  //la charge ne peut pas dépasser la capacité Max de la batterie
             charge= capaciteMax;
         }
@@ -48,14 +46,14 @@ float battery::getTauxDeCharge(){
 
 SOC = charge/capaciteMax*100;// calcul du taux de charge
 float SOC = this->SOC;
-Serial.print("La Taux de charge est de : ");Serial.print(SOC);Serial.println(" %");
+Serial.print("Le Taux de charge est de : ");Serial.print(SOC);Serial.println(" %");
 
     return SOC;
 }
 
 float battery::getTension()
 {
-    float busvoltage = this->getBusVoltage_V();
+    float busvoltage = getBusVoltage_V();
     Serial.print("La tension est de : ");Serial.print(busvoltage);Serial.println(" V");
     return busvoltage;
 }

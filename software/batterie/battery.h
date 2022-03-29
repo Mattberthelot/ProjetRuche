@@ -4,11 +4,10 @@
 #include <Adafruit_INA219.h>
 #include <cmath>
 
-
-class battery: public Adafruit_INA219
+class Battery: public Adafruit_INA219
 {
 public:
-   battery();
+    Battery();
     float getCharge();
     float getTauxDeCharge();
     float getTension();
@@ -16,7 +15,6 @@ public:
     float getCourant();
 
 private:
-
      unsigned long t0;
      unsigned long t1;
      float i0;
@@ -24,6 +22,6 @@ private:
      float SOC;
      float charge;
      float capaciteMax;
-
 };
-#endif
+
+#endif // BATTERY_H

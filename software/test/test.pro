@@ -126,6 +126,7 @@ CONFIG += c++11
 
 SOURCES += \
     src/battery.cpp \
+    src/main.cpp \
     src/main.cpp
 
 HEADERS += \
