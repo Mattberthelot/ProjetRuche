@@ -1,17 +1,19 @@
 #include "battery.h"
 
+
 Battery::Battery():
     Adafruit_INA219(),
-    t0(millis()),
-    t1(0),
-    i0(0),
-    i1(0),
-    SOC(0),
-    charge(0),
-    capaciteMax(3000)
+        t0(millis()),
+        t1(0),
+        i0(0),
+        i1(0),
+        SOC(0),
+        charge(0),
+        capaciteMax(3000)
 {
 
 }
+
 
 float Battery::getCharge(){
 
