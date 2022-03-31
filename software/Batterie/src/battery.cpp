@@ -3,15 +3,16 @@
 
 Battery::Battery():
     Adafruit_INA219(),
-        t0(millis()),
-        t1(0),
-        i0(0),
-        i1(0),
-        SOC(0),
-        charge(0),
-        capaciteMax(3000)
+    t0(millis()),
+    t1(0),
+    i0(0),
+    i1(0),
+    SOC(0),
+    charge(0),
+    capaciteMax(3000)
 {
-
+    preferences.begin("battery", false);
+    charge = preferences.getFloat("charge", 3000);
 }
 
 
@@ -32,7 +33,7 @@ float Battery::getCharge(){
     if(charge<0.0){    // la charge de ne peut pas etre negatif
         charge = 0.0;
     }
-
+    Serial.print("La charge est de : ");Serial.print(charge);Serial.println(" mAh");
     return charge;
 }
 
@@ -67,4 +68,9 @@ float Battery::getCourant()
     float current = this->getCurrent_mA();
     Serial.print("Le courant est de : ");Serial.print(current);Serial.println(" mA");
     return current;
+}
+
+void Battery::memoriserCharge()
+{
+    preferences.putFloat("charge",charge);
 }

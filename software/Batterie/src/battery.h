@@ -2,6 +2,8 @@
 #define BATTERY_H
 #include <Wire.h>
 #include <Adafruit_INA219.h>
+#include <Preferences.h>
+
 
 class Battery: public Adafruit_INA219
 {
@@ -12,6 +14,7 @@ public:
     float getTension();
     float getPuissance();
     float getCourant();
+    void memoriserCharge();
 
 private:
     unsigned long t0;
@@ -21,6 +24,7 @@ private:
     float SOC;
     float charge;
     float capaciteMax;
+    Preferences preferences;
 };
 
 #endif // BATTERY_H
