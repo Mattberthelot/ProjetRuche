@@ -127,7 +127,9 @@ CONFIG += c++11
 SOURCES += \
     src/battery.cpp \
     src/main.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/sigfox.cpp
 
 HEADERS += \
-    src/battery.h
+    src/battery.h \
+    src/sigfox.h

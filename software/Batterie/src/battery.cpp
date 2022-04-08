@@ -1,4 +1,5 @@
 #include "battery.h"
+#include <Arduino.h>
 
 
 Battery::Battery():
@@ -16,7 +17,7 @@ Battery::Battery():
 }
 
 
-float Battery::getCharge(){
+float Battery::getCharge(float temperature){
 
     t1= millis();
     i1 = getCurrent_mA();
@@ -33,6 +34,15 @@ float Battery::getCharge(){
     if(charge<0.0){    // la charge de ne peut pas etre negatif
         charge = 0.0;
     }
+// on arrete le charge si la temperature est en dessous de 0 ou la batterie est charger a fond
+    if (getBusVoltage_V() > 12.6 || temperature < 0.0){
+          digitalWrite(13, LOW);
+       }
+ // on reprend la charge si la température est positive et la batterie n'est pas charger a fond
+       if (getBusVoltage_V() < 12.3 && temperature > 1.0){
+          digitalWrite(13, HIGH);
+       }
+
     Serial.print("La charge est de : ");Serial.print(charge);Serial.println(" mAh");
     return charge;
 }
@@ -73,4 +83,30 @@ float Battery::getCourant()
 void Battery::memoriserCharge()
 {
     preferences.putFloat("charge",charge);
+}
+
+mesureBatterie Battery::CompositionTrame()
+{
+
+    mesureBatterie laTrameBatterie;
+    //Trame batterie
+
+    laTrameBatterie.tension = getTension()*100;
+    laTrameBatterie.courant = getCourant()/10;
+    laTrameBatterie.puissance =getPuissance()/10;
+    laTrameBatterie.charge = getCharge(5.2)*1;
+    laTrameBatterie.soc = getTauxDeCharge()*2;
+    laTrameBatterie.type = '1';
+
+    Serial.println(laTrameBatterie.tension);
+    Serial.println(laTrameBatterie.courant);
+    Serial.println(laTrameBatterie.puissance);
+    Serial.println(laTrameBatterie.charge);
+    Serial.println(laTrameBatterie.soc);
+    Serial.println(laTrameBatterie.type);
+
+//memorisation de la charge
+    memoriserCharge();
+
+    return laTrameBatterie;
 }

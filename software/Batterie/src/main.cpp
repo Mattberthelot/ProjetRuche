@@ -7,21 +7,26 @@
 
 #include <Arduino.h>
 #include <battery.h>
+#include <sigfox.h>
+#include <modemsigfox.h>
 
 
-typedef struct{
-    short int tension;
-    short int courant;
-    short int puissance;
-    short int charge;
-    unsigned char soc;
-    char type;
+//typedef struct{
+//    short int tension;
+//    short int courant;
+//    short int puissance;
+//    short int charge;
+//    unsigned char soc;
+//    char type;
 
-}mesureBatterie;
+//}mesureBatterie;
 
 int LED = 2;
 Battery *laBattery;
-mesureBatterie laTrameBatterie;
+//mesureBatterie laTrameBatterie;
+//Sigfox leSigfox(26,27,true);
+ModemSigfox leModem;
+bool booleen =true;
 
 void setup()
 {
@@ -47,22 +52,44 @@ void loop()
 
 
 
+//    //Trame batterie
 
-    laTrameBatterie.tension = laBattery->getTension()*100;
-    laTrameBatterie.courant = laBattery->getCourant()/10;
-    laTrameBatterie.puissance = laBattery->getPuissance()/10;
-    laTrameBatterie.charge = laBattery->getCharge()*1;
-    laTrameBatterie.soc = laBattery->getTauxDeCharge()*2;
-    laTrameBatterie.type = '1';
+//    laTrameBatterie.tension = laBattery->getTension()*100;
+//    laTrameBatterie.courant = laBattery->getCourant()/10;
+//    laTrameBatterie.puissance = laBattery->getPuissance()/10;
+//    laTrameBatterie.charge = laBattery->getCharge(5.2)*1;
+//    laTrameBatterie.soc = laBattery->getTauxDeCharge()*2;
+//    laTrameBatterie.type = '1';
+//memorisation de la charge
 
-    laBattery->memoriserCharge();
-
-    Serial.println(laTrameBatterie.tension);
-    Serial.println(laTrameBatterie.courant);
-    Serial.println(laTrameBatterie.puissance);
-    Serial.println(laTrameBatterie.charge);
-    Serial.println(laTrameBatterie.soc);
-    Serial.println(laTrameBatterie.type);
+//    laBattery->memoriserCharge();
 
 
+
+
+//laTrameBatterie=laBattery->getMesures();
+
+    leModem.envoyerTrame(1,*laBattery);
+//affichage de la trame
+//    Serial.println(laTrameBatterie.tension);
+//    Serial.println(laTrameBatterie.courant);
+//    Serial.println(laTrameBatterie.puissance);
+//    Serial.println(laTrameBatterie.charge);
+//    Serial.println(laTrameBatterie.soc);
+//    Serial.println(laTrameBatterie.type);
+
+
+//    if (booleen==true){
+//        if (leSigfox.envoyer(&laTrameBatterie,10))
+//        {
+//            Serial.println("Trame envoyée avec succès");
+//        }
+//        else{
+//            Serial.println("Problème envoi");
+//        }
+
+//        booleen = false;
+//    }
 }
+
+
