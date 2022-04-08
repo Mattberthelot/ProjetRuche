@@ -1,6 +1,6 @@
 /*
  * File:   main.cpp
- * Author: philippe
+ * Author: Matt berthelot
  *
  * Created on 5 novembre 2021, 17:42
  */
@@ -12,22 +12,36 @@
 int LED = 2;
 
 typedef struct{
-    short int tension= 300;
-    short int courant = 2 ;
-    short int puissance = 50;
-    short int charge = 1000;
-    unsigned char soc= 10;
-    char type=1;
+    short int tension;
+    short int courant;
+    short int puissance;
+    short int charge;
+    unsigned char soc;
+    char type;
 
 }mesureBatterie;
 
-Sigfox leSigfox(26,27,true);
+Sigfox leSigfox;
+
 mesureBatterie laTrameBatterie;
+
+
+
 void setup()
 {
     pinMode(LED, OUTPUT);
     Serial.begin(115200);
     Serial.println("Setup done");
+    laTrameBatterie.tension = 12;
+    laTrameBatterie.courant = 152;
+    laTrameBatterie.puissance = 200;
+    laTrameBatterie.charge = 3000;
+    laTrameBatterie.soc = 100;
+    laTrameBatterie.type = 2;
+    delay(4000);
+
+
+    leSigfox.begin();
 
     leSigfox.envoyer((void*)&laTrameBatterie,sizeof (laTrameBatterie));
 
