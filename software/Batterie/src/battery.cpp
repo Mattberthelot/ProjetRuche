@@ -12,7 +12,9 @@ Battery::Battery():
     charge(0),
     capaciteMax(3000)
 {
-    preferences.begin("battery", false);
+    pinMode(13, OUTPUT);     // GPIO 13 en sortie
+      digitalWrite(13, HIGH);  // Fermeture du Mosfet charge de la batterie
+    preferences.begin("battery", false); //initialisation mémoire batterie
     charge = preferences.getFloat("charge", 3000);
 }
 

@@ -16,6 +16,7 @@ typedef struct{
     short int courant;
     short int puissance;
     short int charge;
+    short int field6 = 0;
     unsigned char soc;
     char type;
 
@@ -32,8 +33,8 @@ void setup()
     pinMode(LED, OUTPUT);
     Serial.begin(115200);
     Serial.println("Setup done");
-    laTrameBatterie.tension = 12;
-    laTrameBatterie.courant = 152;
+    laTrameBatterie.tension = 15;
+    laTrameBatterie.courant = 100;
     laTrameBatterie.puissance = 200;
     laTrameBatterie.charge = 3000;
     laTrameBatterie.soc = 100;
