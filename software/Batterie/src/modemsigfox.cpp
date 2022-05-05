@@ -14,7 +14,7 @@ void ModemSigfox::envoyerTrame(int type, Battery bat)
     if(type == 1)
     {
         mesureBatterie trameBatterie;
-        trameBatterie = bat.CompositionTrame();
+        //trameBatterie = bat.CompositionTrame();
 
         if (envoyer((void*)&trameBatterie,sizeof(trameBatterie)))
         {

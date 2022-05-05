@@ -128,8 +128,10 @@ SOURCES += \
     src/battery.cpp \
     src/main.cpp \
     src/main.cpp \
+    src/scan.cpp \
     src/sigfox.cpp
 
 HEADERS += \
     src/battery.h \
+    src/scan.h \
     src/sigfox.h

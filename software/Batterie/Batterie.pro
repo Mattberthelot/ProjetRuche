@@ -129,13 +129,9 @@ CONFIG += c++11
 
 SOURCES += \
     src/battery.cpp \
-    src/controleur.cpp \
     src/main.cpp \
-    src/modemsigfox.cpp \
     src/sigfox.cpp
 
 HEADERS += \
     src/battery.h \
-    src/controleur.h \
-    src/modemsigfox.h \
     src/sigfox.h

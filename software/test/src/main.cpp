@@ -7,6 +7,7 @@
 
 #include <Arduino.h>
 #include "sigfox.h"
+#include "scan.h"
 
 
 int LED = 2;
@@ -25,21 +26,76 @@ typedef struct{
 Sigfox leSigfox;
 
 mesureBatterie laTrameBatterie;
+int choix;
+float tension;
+float courant;
+float puissance;
+float charge;
+float soc;
 
+void afficherMenu(){
+    Scan::effacer();
+    Serial.println("Menu batterie, que souhaitez vous faire?");
+    Serial.println("\n 1- Configurer les données de la trame\n");
+    Scan::afficherPrompt("batterie");
 
+}
 
 void setup()
 {
     pinMode(LED, OUTPUT);
     Serial.begin(115200);
     Serial.println("Setup done");
-    laTrameBatterie.tension = 15;
-    laTrameBatterie.courant = 100;
-    laTrameBatterie.puissance = 200;
-    laTrameBatterie.charge = 3000;
-    laTrameBatterie.soc = 100;
+
+    do{
+        afficherMenu();
+        while(!Serial.available());
+        choix = Serial.read();
+
+        switch(choix){
+
+        case'1':
+            Scan::effacer();
+            Serial.println("\n Donner la valeur de la tension \n");
+            tension = Scan::lireFloat();
+
+            Serial.println("\n Donner la valeur de la courant \n");
+            courant = Scan::lireFloat();
+
+            Serial.println("\n Donner la valeur de la puissance \n");
+            puissance = Scan::lireFloat();
+
+            Serial.println("\n Donner la valeur de la charge \n");
+            charge = Scan::lireFloat();
+
+            Serial.println("\n Donner la valeur de la soc \n");
+            soc = Scan::lireFloat();
+
+        }
+
+
+    }while(choix!= '5');
+    Scan::effacer();
+    Serial.printf("Ctrl-C pour quitter\r\n");
+
+
+    laTrameBatterie.tension = tension*100;
+    laTrameBatterie.courant = courant/10;
+    laTrameBatterie.puissance = puissance/10;
+    laTrameBatterie.charge = charge;
+    laTrameBatterie.soc = soc*2;
     laTrameBatterie.type = 2;
     delay(4000);
+
+    Serial.println(laTrameBatterie.tension);
+    Serial.println(laTrameBatterie.courant);
+    Serial.println(laTrameBatterie.puissance);
+    Serial.println(laTrameBatterie.charge);
+    Serial.println(laTrameBatterie.soc);
+    Serial.println(laTrameBatterie.type);
+
+
+
 
 
     leSigfox.begin();
