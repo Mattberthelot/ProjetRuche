@@ -1,3 +1,4 @@
+
 /**
   @file :battery.cpp
   @author : Matt berthelot
@@ -12,13 +13,13 @@
 
 /**
  * @brief Battery::Battery
- * @details: On initialise les
+ * @details: On initialise les varibales de la batterie
  */
 Battery::Battery():
     Adafruit_INA219(),
-   // t0(0),
+    t0(0),
     t1(0),
-   // i0(0),
+    i0(0),
     i1(0),
     SOC(0),
     charge(0),
@@ -28,43 +29,51 @@ Battery::Battery():
     digitalWrite(pin, HIGH);  // Fermeture du Mosfet charge de la batterie
 }
 
+/**
+ * @brief Battery::getChargeLoop
+ * @details : Calcule la charge de la batterie et arrête la charge
+ *          si la température est inférieure à 0 ou si la batterie
+ *          a une tension supérieure a 12.6 V à chaque seconde
+ * @param temperature : Température ambiante
+ * @return Valeur de la charge de la batterie à l'instant t1
+ */
+float Battery::getChargeLoop(float temperature){
 
-//float Battery::getChargeLoop(float temperature){
+    t1= millis();
+    i1 = getCurrent_mA();
 
-//    t1= millis();
-//    i1 = getCurrent_mA();
+    charge += (i0+i1)*(t1-t0)/7200000;   //calcul de la charge trapèze
 
-//    charge += (i0+i1)*(t1-t0)/7200000;   //calcul de la charge trapèze
+    i0 = i1;
+    t0 = t1;
 
-//    i0 = i1;
-//    t0 = t1;
+    if(charge>capaciteMax){  //la charge ne peut pas dépasser la capacité Max de la batterie
+        charge= capaciteMax;
+    }
 
-//    if(charge>capaciteMax){  //la charge ne peut pas dépasser la capacité Max de la batterie
-//        charge= capaciteMax;
-//    }
+    if(charge<0.0){    // la charge de ne peut pas etre negatif
+        charge = 0.0;
+    }
+    // on arrete le charge si la temperature est en dessous de 0 ou la batterie est charger a fond
+    if (getBusVoltage_V() > 12.6 || temperature < 0.0){
+        digitalWrite(13, LOW);
+    }
+    // on reprend la charge si la température est positive et la batterie n'est pas charger a fond
+    if (getBusVoltage_V() < 12.3 && temperature > 1.0){
+        digitalWrite(13, HIGH);
+    }
 
-//    if(charge<0.0){    // la charge de ne peut pas etre negatif
-//        charge = 0.0;
-//    }
-//    // on arrete le charge si la temperature est en dessous de 0 ou la batterie est charger a fond
-//    if (getBusVoltage_V() > 12.6 || temperature < 0.0){
-//        digitalWrite(13, LOW);
-//    }
-//    // on reprend la charge si la température est positive et la batterie n'est pas charger a fond
-//    if (getBusVoltage_V() < 12.3 && temperature > 1.0){
-//        digitalWrite(13, HIGH);
-//    }
-
-//    Serial.print("La chargeLoop est de : ");Serial.print(charge);Serial.println(" mAh");
-//    return charge;
-//}
+    Serial.print("La chargeLoop est de : ");Serial.print(charge);Serial.println(" mAh");
+    return charge;
+}
 /**
  * @brief Battery::getChargeSetup
- * @details Calcule la charge de la batterie et arrete la charge
- *          si la temperature est inférieur a 0 ou si la batterie
- *          a une tension superieur a 12.6 V
+ * @details Calcule la charge de la batterie et arrête la charge
+ *          si la température est inférieure à 0 ou si la batterie
+ *          a une tension supérieure a 12.6 V
  * @param temperature : Température ambiante
- * @return valeur de la charge de la batterie a l'instant t1
+ * @return Valeur de la charge de la batterie à l'instant t1
+ *
  */
 
 float Battery::getChargeSetup(float temperature)
@@ -102,7 +111,7 @@ float Battery::getChargeSetup(float temperature)
  *            a une tension supérieure à 12.6 V. On peux reprendre la charge si
  *            la tension est inférieur à 12.3 V et la température supérieur a 1 degré.
  * @param temperature : Température ambiante
- * @return valeur de la charge de la batterie a linstant t0
+ * @return Valeur de la charge de la batterie a linstant t0
  */
 float Battery::getCharge(float temperature)
 {
@@ -121,7 +130,7 @@ float Battery::getCharge(float temperature)
  * @brief Battery::getTauxDeCharge
  * @details Obtenir le taux de charge de la batterie
  *          en prenant la charge divisée par la capacité maximum de la batterie * 100
- * @return taux de charge en pourcentage
+ * @return Taux de charge en pourcentage
  */
 float Battery::getTauxDeCharge(){
 
@@ -138,7 +147,7 @@ float Battery::getTauxDeCharge(){
  * @brief Battery::getTension
  * @details: Obtenir la tension de la batterie en V
  *           grâce a la fonction obtenir tension de l'INA219
- * @return valeur de la tension de la batterie
+ * @return Valeur de la tension de la batterie
  */
 float Battery::getTension()
 {
@@ -151,7 +160,7 @@ float Battery::getTension()
  * @brief Battery::getPuissance
  * @details: Obtenir la puissance de la batterie en mW
  *           grâce a la fonction obtenir puissance de l'INA219
- * @return valeur de la puissance de la batterie
+ * @return Valeur de la puissance de la batterie
  */
 float Battery::getPuissance()
 {
@@ -163,7 +172,7 @@ float Battery::getPuissance()
  * @brief Battery::getCourant
  * @details: Obtenir le courant de la batterie en mA
  *           grâce a la fonction obtenir courant de l'INA219
- * @return valeur du courant de la batterie
+ * @return Valeur du courant de la batterie
  */
 float Battery::getCourant()
 {
@@ -199,6 +208,32 @@ void Battery::memoriserCharge()
     preferences.begin("battery", false); //initialisation mémoire batterie
     preferences.putFloat("charge",charge);//mémoriser la charge dans le mémoire flash
     preferences.end();
+}
+/**
+ * @brief Battery::modifierCharge
+ * @details : Modifier la valeur de la charge si elle est connu
+ * @param charge : Charge de la batterie
+ */
+void Battery::modifierCharge(float charge)
+{
+    preferences.begin("battery", false); //initialisation mémoire batterie
+        preferences.putFloat("charge",charge);//mémoriser la charge dans le mémoire flash
+        preferences.end();
+}
+/**
+ * @brief Battery::LireCharge
+ * @details : Lire la charge de la batterie pour effectuer le calcul de perte de charge pendant l'endormissement de l'esp32
+ * @return Charge de la batterie
+ */
+float Battery::LireCharge()
+{
+    preferences.begin("battery", false); //initialisation mémoire batterie
+       float charge = preferences.getFloat("charge",0);//mémoriser la charge dans le mémoire flash
+       preferences.end();
+
+       this->charge = charge;
+
+       return charge;
 }
 
 

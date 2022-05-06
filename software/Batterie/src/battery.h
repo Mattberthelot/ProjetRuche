@@ -32,13 +32,16 @@ public:
     float getCourant();
     bool  init();
     void memoriserCharge();
+    void modifierCharge(float charge);
+       float LireCharge();
+
 
 
 
 private:
-   // unsigned long t0; /// Mesure prise a l'insant 0
+    unsigned long t0; /// Mesure prise a l'insant 0
     unsigned long t1;/// Mesure prise a l'instant t1 apès l'envoie sigfox
-   // float i0; //// Valeur du courant a l'instant t0
+    float i0; //// Valeur du courant a l'instant t0
     float i1; /// Valeur du courant au point t1
     float SOC; /// Valeur du taux de charge de la batterie
     float charge;/// Valeur de la charge de la batterie

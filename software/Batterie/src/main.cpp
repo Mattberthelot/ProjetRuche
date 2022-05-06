@@ -1,7 +1,6 @@
 /**
  * File:   main.cpp
  * Author: Matt berthelot
- *
  * Created on 5 novembre 2021, 17:42
  */
 
@@ -51,7 +50,7 @@ void setup()
 
 
    // leSigfox.envoyer((void*)&laTrameBatterie,sizeof (laTrameBatterie));//envoie de la trame
-delay(10000);
+delay(6000);
    laBattery->getChargeSetup(5.2);
     //memorisation de la charge
     laBattery->memoriserCharge();
@@ -66,8 +65,6 @@ void loop()
     digitalWrite(LED, digitalRead(LED) ^1);    // turn the LED
     delay(5000);
 
-
-
-}
+    }
 
 
