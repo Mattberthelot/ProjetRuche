@@ -7,7 +7,7 @@
 #include <Arduino.h>
 #include <battery.h>
 #include <sigfox.h>
-#include <modemsigfox.h>
+
 
 int LED = 2;
 Battery *laBattery;
@@ -50,7 +50,7 @@ void setup()
 
 
    // leSigfox.envoyer((void*)&laTrameBatterie,sizeof (laTrameBatterie));//envoie de la trame
-delay(6000);
+delay(2000);
    laBattery->getChargeSetup(5.2);
     //memorisation de la charge
     laBattery->memoriserCharge();

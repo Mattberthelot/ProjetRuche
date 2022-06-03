@@ -73,7 +73,6 @@ float Battery::getChargeLoop(float temperature){
  *          a une tension supérieure a 12.6 V
  * @param temperature : Température ambiante
  * @return Valeur de la charge de la batterie à l'instant t1
- *
  */
 
 float Battery::getChargeSetup(float temperature)
@@ -211,14 +210,14 @@ void Battery::memoriserCharge()
 }
 /**
  * @brief Battery::modifierCharge
- * @details : Modifier la valeur de la charge si elle est connu
+ * @details : Modifier la valeur de la charge si elle est connue
  * @param charge : Charge de la batterie
  */
 void Battery::modifierCharge(float charge)
 {
     preferences.begin("battery", false); //initialisation mémoire batterie
-        preferences.putFloat("charge",charge);//mémoriser la charge dans le mémoire flash
-        preferences.end();
+    preferences.putFloat("charge",charge);//mémoriser la charge dans le mémoire flash
+    preferences.end();
 }
 /**
  * @brief Battery::LireCharge
@@ -228,12 +227,12 @@ void Battery::modifierCharge(float charge)
 float Battery::LireCharge()
 {
     preferences.begin("battery", false); //initialisation mémoire batterie
-       float charge = preferences.getFloat("charge",0);//mémoriser la charge dans le mémoire flash
-       preferences.end();
+    float charge = preferences.getFloat("charge",0);//mémoriser la charge dans le mémoire flash
+    preferences.end();
 
-       this->charge = charge;
+    this->charge = charge;
 
-       return charge;
+    return charge;
 }
 
 

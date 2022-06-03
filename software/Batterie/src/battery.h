@@ -33,7 +33,7 @@ public:
     bool  init();
     void memoriserCharge();
     void modifierCharge(float charge);
-       float LireCharge();
+    float LireCharge();
 
 
 
